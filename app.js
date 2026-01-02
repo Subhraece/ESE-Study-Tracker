@@ -189,6 +189,20 @@ function getDaysRemaining(endDate) {
     return Math.max(0, diffDays);
 }
 
+// Calculate total days between startDate and endDate
+function getTotalDays(startDate, endDate) {
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(endDate);
+    end.setHours(0, 0, 0, 0);
+
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return Math.max(1, diffDays); // At least 1 day
+}
+
 function formatDate(dateStr) {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -232,7 +246,8 @@ function updateSubjectPreview() {
         : 0;
     const daysRemaining = getDaysRemaining(subject.endDate);
     const remainingLectures = progress.totalLectures - progress.completed;
-    const lecturesPerDay = daysRemaining > 0 ? (remainingLectures / daysRemaining).toFixed(1) : remainingLectures;
+    const totalDays = getTotalDays(subject.startDate, subject.endDate);
+    const lecturesPerDay = (progress.totalLectures / totalDays).toFixed(1);
     const status = getSubjectStatus(subject);
 
     container.innerHTML = `
@@ -591,7 +606,8 @@ function renderTodaySchedule() {
         const progress = state.progress[subject.id] || { completed: 0, totalLectures: subject.totalLectures };
         const remaining = progress.totalLectures - progress.completed;
         const daysRemaining = getDaysRemaining(subject.endDate);
-        const lecturesPerDay = daysRemaining > 0 ? Math.ceil(remaining / daysRemaining) : remaining;
+        const totalDays = getTotalDays(subject.startDate, subject.endDate);
+        const lecturesPerDay = Math.ceil(progress.totalLectures / totalDays);
 
         const card = document.createElement('div');
         card.className = 'schedule-card new-lecture';

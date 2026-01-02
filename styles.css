@@ -106,8 +106,8 @@ body::before {
     top: 0;
     z-index: 100;
     padding: var(--spacing-md) 0;
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     background: rgba(10, 10, 15, 0.8);
     margin: calc(-1 * var(--spacing-md));
     margin-bottom: var(--spacing-lg);
@@ -212,8 +212,8 @@ body::before {
    ============================================ */
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
@@ -586,6 +586,7 @@ body::before {
 
 .number-input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .log-btn {
@@ -789,6 +790,7 @@ body::before {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     z-index: 1000;
     display: flex;
@@ -2207,8 +2209,8 @@ html {
     /* Google Pixel Style Updates */
     .glass-card {
         background: rgba(30, 30, 35, 0.6) !important;
-        backdrop-filter: blur(20px) !important;
         -webkit-backdrop-filter: blur(20px) !important;
+        backdrop-filter: blur(20px) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 24px !important;
         /* More rounded like Pixel UI */
@@ -2301,135 +2303,4 @@ html {
         transform: scale(1.05);
         box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
-
-    /* Enhanced Responsive Layout */
-    @media (max-width: 1200px) {
-
-        /* Tablet/Laptop: Ensure 4 columns for stats if space permits, else 2x2 */
-        .overview-stats {
-            grid-template-columns: repeat(4, 1fr) !important;
-        }
-    }
-
-    @media (max-width: 900px) {
-        .overview-stats {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .app-container {
-            padding: var(--spacing-sm);
-        }
-
-        .overview-section {
-            grid-template-columns: 1fr;
-        }
-
-        .overview-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .header-badges {
-            width: 100%;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
-        }
-
-        .overview-stats {
-            grid-template-columns: repeat(2, 1fr) !important;
-            /* Mobile: 2 items per line */
-            gap: var(--spacing-sm);
-        }
-
-        .stat-item {
-            padding: var(--spacing-md);
-        }
-
-        /* Ensure no horizontal overflow */
-        body,
-        html {
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        /* Fix Quick Select / Log Overflow */
-        .log-column {
-            width: 100%;
-            min-width: 0;
-        }
-
-        .subject-chips-wrapper {
-            width: 100%;
-            overflow-x: hidden;
-        }
-
-        .subject-chips-container {
-            width: 100%;
-            padding-right: 20px;
-            /* Space for scrolling */
-        }
-    }
-
-    @media (max-width: 480px) {
-        .overview-stats {
-            grid-template-columns: repeat(2, 1fr) !important;
-            /* Keep 2x2 on small mobile too */
-        }
-
-        .subject-card {
-            margin-bottom: var(--spacing-sm);
-        }
-
-        /* Ensure stats text fits */
-        .stat-label {
-            font-size: 0.7rem;
-        }
-
-        .stat-value {
-            font-size: 1.2rem;
-        }
-    }
-
-    /* =========================================
-   FORCE GLOBAL DEFAULTS & OVERFLOW FIXES
-   ========================================= */
-    .overview-stats {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: var(--spacing-sm);
-        width: 100%;
-    }
-
-    @media (max-width: 768px) {
-        .overview-stats {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-
-        .schedule-log-row {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-        }
-
-        .log-column {
-            width: 100%;
-            min-width: 0;
-            overflow: hidden;
-            /* Force containment */
-        }
-
-        .subject-chips-wrapper {
-            width: 100%;
-            overflow-x: hidden;
-        }
-
-        .subject-chips-container {
-            width: 100%;
-            display: flex;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-    }
+}
