@@ -30,7 +30,7 @@ let state = {
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
     await loadSubjectsData(); // Load subjects first
-    await loadStateFromJSON();
+    await loadStateFromCSV();  // Load progress from CSV
     initializeProgress();
     updateCurrentDate();
     renderTodaySummary();
@@ -88,45 +88,60 @@ function getCategoryColors() {
 }
 
 // ============================================
-// JSON Backend Functions
+// CSV Backend Functions
 // ============================================
-async function loadStateFromJSON() {
+async function loadStateFromCSV() {
     try {
-        const response = await fetch('progress.json');
+        const response = await fetch('progress.csv');
         if (response.ok) {
-            const data = await response.json();
-            if (data.progress && Object.keys(data.progress).length > 0) {
-                state.progress = data.progress;
-                state.settings = data.settings || state.settings;
-            }
+            const csvText = await response.text();
+            parseCSVToState(csvText);
+            console.log('✅ Loaded progress from progress.csv');
+            return;
         }
     } catch (error) {
-        console.log('JSON file not found, using localStorage');
+        console.log('⚠️ progress.csv not found, initializing empty progress');
     }
+}
 
-    const savedState = localStorage.getItem('eseStudyTrackerState');
-    if (savedState && Object.keys(state.progress).length === 0) {
-        const parsed = JSON.parse(savedState);
-        state.progress = parsed.progress || {};
-        state.settings = parsed.settings || state.settings;
+function parseCSVToState(csvText) {
+    const lines = csvText.trim().split('\n');
+    // Skip header line
+    for (let i = 1; i < lines.length; i++) {
+        const [subjectId, completed, totalLectures, lastUpdated] = lines[i].split(',');
+        if (subjectId) {
+            state.progress[subjectId.trim()] = {
+                completed: parseInt(completed) || 0,
+                totalLectures: parseInt(totalLectures) || 0
+            };
+        }
     }
 }
 
 function saveState() {
-    localStorage.setItem('eseStudyTrackerState', JSON.stringify({
-        progress: state.progress,
-        settings: state.settings
-    }));
-    updateDownloadableJSON();
+    // No localStorage - data only saved on download
+    console.log('State updated in memory. Click "Download Progress" to save.');
 }
 
-function updateDownloadableJSON() {
-    const data = {
-        progress: state.progress,
-        settings: state.settings,
-        lastUpdated: new Date().toISOString()
-    };
-    sessionStorage.setItem('progressJSON', JSON.stringify(data, null, 2));
+function downloadProgressCSV() {
+    const today = new Date().toISOString().split('T')[0];
+    let csv = 'subject_id,completed,total_lectures,last_updated\n';
+
+    getSubjects().forEach(subject => {
+        const progress = state.progress[subject.id] || { completed: 0, totalLectures: subject.totalLectures };
+        csv += `${subject.id},${progress.completed},${progress.totalLectures},${today}\n`;
+    });
+
+    // Create download link
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `progress_${today}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast('📥 Progress CSV downloaded!', 'success');
 }
 
 function initializeProgress() {
@@ -140,7 +155,7 @@ function initializeProgress() {
             state.progress[subject.id].totalLectures = subject.totalLectures;
         }
     });
-    saveState();
+    // No saveState() call - we don't want to trigger localStorage
 }
 
 // ============================================
@@ -214,12 +229,12 @@ function calculateDailyTarget(subject, progress) {
     const remainingLectures = progress.totalLectures - progress.completed;
 
     // User Rule: 
-    // If durationDays >= daysRemaining: totalLectures / daysRemaining
-    // If durationDays < daysRemaining: totalLectures / durationDays
+    // If durationDays >= daysRemaining: (totalLectures - completed) / daysRemaining
+    // If durationDays < daysRemaining: (totalLectures - completed) / durationDays
     if (totalDays >= daysRemaining) {
-        return progress.totalLectures / Math.max(1, daysRemaining);
+        return remainingLectures / Math.max(1, daysRemaining);
     } else {
-        return progress.totalLectures / Math.max(1, totalDays);
+        return remainingLectures / Math.max(1, totalDays);
     }
 }
 
@@ -787,7 +802,12 @@ function getStatusLabel(status) {
 // ============================================
 function incrementLecture() {
     const input = document.getElementById('lectureCount');
-    input.value = parseInt(input.value) + 1;
+    const currentValue = parseInt(input.value);
+    const maxValue = input.max ? parseInt(input.max) : Infinity;
+
+    if (currentValue < maxValue) {
+        input.value = currentValue + 1;
+    }
 }
 
 function decrementLecture() {
