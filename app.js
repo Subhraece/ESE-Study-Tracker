@@ -208,6 +208,21 @@ function formatDate(dateStr) {
     return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+function calculateDailyTarget(subject, progress) {
+    const totalDays = subject.durationDays || getTotalDays(subject.startDate, subject.endDate);
+    const daysRemaining = getDaysRemaining(subject.endDate);
+    const remainingLectures = progress.totalLectures - progress.completed;
+
+    // User Rule: 
+    // If durationDays >= daysRemaining (Active/Crunch), use remaining/remaining
+    // If durationDays < daysRemaining (Future), use total/duration
+    if (totalDays >= daysRemaining) {
+        return remainingLectures / Math.max(1, daysRemaining);
+    } else {
+        return progress.totalLectures / Math.max(1, totalDays);
+    }
+}
+
 // ============================================
 // Today Summary Section
 // ============================================
@@ -249,7 +264,7 @@ function updateSubjectPreview() {
 
     // Use durationDays from JSON if available, otherwise calculate
     const totalDays = subject.durationDays || getTotalDays(subject.startDate, subject.endDate);
-    const lecturesPerDay = (progress.totalLectures / totalDays).toFixed(1);
+    const lecturesPerDay = calculateDailyTarget(subject, progress).toFixed(1);
     const status = getSubjectStatus(subject);
 
     container.innerHTML = `
@@ -496,7 +511,7 @@ function renderSubjectsGrid() {
         const remainingLectures = progress.totalLectures - progress.completed;
         // Use durationDays from JSON for per-day calculation
         const totalDays = subject.durationDays || getTotalDays(subject.startDate, subject.endDate);
-        const lecturesPerDay = (progress.totalLectures / totalDays).toFixed(1);
+        const lecturesPerDay = calculateDailyTarget(subject, progress).toFixed(1);
 
         const card = document.createElement('div');
         card.className = 'subject-card';
@@ -618,7 +633,7 @@ function renderTodaySchedule() {
         const daysRemaining = getDaysRemaining(subject.endDate);
         // Use durationDays from JSON if available
         const totalDays = subject.durationDays || getTotalDays(subject.startDate, subject.endDate);
-        const lecturesPerDay = Math.ceil(progress.totalLectures / totalDays);
+        const lecturesPerDay = calculateDailyTarget(subject, progress).toFixed(1);
 
         const card = document.createElement('div');
         card.className = 'schedule-card new-lecture';
@@ -672,13 +687,16 @@ function updateOverviewStats() {
     activeSubjects.forEach(subject => {
         const progress = state.progress[subject.id] || { completed: 0, totalLectures: subject.totalLectures };
         const remaining = progress.totalLectures - progress.completed;
-        const daysRemaining = getDaysRemaining(subject.endDate);
-        const perDay = daysRemaining > 0 ? Math.ceil(remaining / daysRemaining) : remaining;
+
+        const perDay = calculateDailyTarget(subject, progress);
 
         totalToday += perDay;
         totalCompleted += progress.completed;
         totalRemaining += remaining;
     });
+
+    // Round totalToday up for display
+    totalToday = Math.ceil(totalToday);
 
     // Update Overall Stats
     document.getElementById('todayLectures').textContent = totalToday;
