@@ -214,12 +214,32 @@ function calculateDailyTarget(subject, progress) {
     const remainingLectures = progress.totalLectures - progress.completed;
 
     // User Rule: 
-    // If durationDays >= daysRemaining (Active/Crunch), use remaining/remaining
-    // If durationDays < daysRemaining (Future), use total/duration
+    // If durationDays >= daysRemaining: totalLectures / daysRemaining
+    // If durationDays < daysRemaining: totalLectures / durationDays
     if (totalDays >= daysRemaining) {
-        return remainingLectures / Math.max(1, daysRemaining);
+        return progress.totalLectures / Math.max(1, daysRemaining);
     } else {
         return progress.totalLectures / Math.max(1, totalDays);
+    }
+}
+
+function updateLectureInputMax() {
+    const lectureInput = document.getElementById('lectureCount');
+    if (!lectureInput) return;
+
+    const subjectId = state.selectedChipSubject || document.getElementById('subjectSelect')?.value;
+
+    if (subjectId) {
+        const subject = getSubjects().find(s => s.id === subjectId);
+        if (subject) {
+            lectureInput.max = subject.totalLectures;
+            // Reset value if it exceeds the new max
+            if (parseInt(lectureInput.value) > subject.totalLectures) {
+                lectureInput.value = subject.totalLectures;
+            }
+        }
+    } else {
+        lectureInput.removeAttribute('max');
     }
 }
 
@@ -278,8 +298,8 @@ function updateSubjectPreview() {
                 <span class="preview-stat-value ${status}">${getStatusLabel(status)}</span>
             </div>
             <div class="preview-stat">
-                <span class="preview-stat-label">মোট দিন</span>
-                <span class="preview-stat-value">${totalDays}</span>
+                <span class="preview-stat-label">Duration</span>
+                <span class="preview-stat-value">${totalDays} দিন</span>
             </div>
             <div class="preview-stat">
                 <span class="preview-stat-label">বাকি দিন</span>
@@ -369,6 +389,8 @@ function selectChipSubject(subjectId) {
         select.value = '';
     }
 
+    // Update max limit for lecture input
+    updateLectureInputMax();
     // Update preview when selection changes
     updateSubjectPreview();
 }
@@ -382,6 +404,7 @@ function scrollSelectLeft() {
         select.selectedIndex--;
         state.selectedChipSubject = select.value || null;
         renderSubjectChips();
+        updateLectureInputMax();
         updateSubjectPreview();
     }
 }
@@ -392,6 +415,7 @@ function scrollSelectRight() {
         select.selectedIndex++;
         state.selectedChipSubject = select.value || null;
         renderSubjectChips();
+        updateLectureInputMax();
         updateSubjectPreview();
     }
 }
@@ -458,6 +482,7 @@ function renderSubjectSelect() {
     select.onchange = () => {
         state.selectedChipSubject = select.value || null;
         renderSubjectChips();
+        updateLectureInputMax();
         updateSubjectPreview();
     };
 }
