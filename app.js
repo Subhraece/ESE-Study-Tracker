@@ -246,7 +246,9 @@ function updateSubjectPreview() {
         : 0;
     const daysRemaining = getDaysRemaining(subject.endDate);
     const remainingLectures = progress.totalLectures - progress.completed;
-    const totalDays = getTotalDays(subject.startDate, subject.endDate);
+
+    // Use durationDays from JSON if available, otherwise calculate
+    const totalDays = subject.durationDays || getTotalDays(subject.startDate, subject.endDate);
     const lecturesPerDay = (progress.totalLectures / totalDays).toFixed(1);
     const status = getSubjectStatus(subject);
 
@@ -259,6 +261,10 @@ function updateSubjectPreview() {
             <div class="preview-stat">
                 <span class="preview-stat-label">Status</span>
                 <span class="preview-stat-value ${status}">${getStatusLabel(status)}</span>
+            </div>
+            <div class="preview-stat">
+                <span class="preview-stat-label">মোট দিন</span>
+                <span class="preview-stat-value">${totalDays}</span>
             </div>
             <div class="preview-stat">
                 <span class="preview-stat-label">বাকি দিন</span>
@@ -488,9 +494,9 @@ function renderSubjectsGrid() {
 
         const daysRemaining = getDaysRemaining(subject.endDate);
         const remainingLectures = progress.totalLectures - progress.completed;
-        const lecturesPerDay = daysRemaining > 0
-            ? (remainingLectures / daysRemaining).toFixed(1)
-            : remainingLectures;
+        // Use durationDays from JSON for per-day calculation
+        const totalDays = subject.durationDays || getTotalDays(subject.startDate, subject.endDate);
+        const lecturesPerDay = (progress.totalLectures / totalDays).toFixed(1);
 
         const card = document.createElement('div');
         card.className = 'subject-card';
@@ -606,7 +612,8 @@ function renderTodaySchedule() {
         const progress = state.progress[subject.id] || { completed: 0, totalLectures: subject.totalLectures };
         const remaining = progress.totalLectures - progress.completed;
         const daysRemaining = getDaysRemaining(subject.endDate);
-        const totalDays = getTotalDays(subject.startDate, subject.endDate);
+        // Use durationDays from JSON if available
+        const totalDays = subject.durationDays || getTotalDays(subject.startDate, subject.endDate);
         const lecturesPerDay = Math.ceil(progress.totalLectures / totalDays);
 
         const card = document.createElement('div');
