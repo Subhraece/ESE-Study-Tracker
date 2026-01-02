@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESE Study Tracker | Parakram 2027</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* CRITICAL OVERRIDES */
+
+        /* 1. SCROLLBAR HIDING (User Request) */
+        .subject-chips-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .subject-chips-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 2. OVERVIEW GRID (Strict User Reqs) */
+        .overview-stats {
+            display: grid;
+            width: 100%;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 1rem;
+        }
+
+        /* 3. LAYOUT & OVERFLOW PROTECTION */
+        .app-container,
+        body,
+        html {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        .schedule-log-row {
+            display: grid;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Flex Shrinking (Prevents Overflow) */
+        .schedule-column,
+        .log-column {
+            min-width: 0 !important;
+            overflow: hidden;
+        }
+
+        /* 4. CHIPS CONTAINER */
+        .subject-chips-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .subject-chips-container {
+            display: flex;
+            width: 100%;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding-bottom: 0 !important;
+        }
+
+        /* 5. RESPONSIVE BREAKPOINTS */
+        @media (min-width: 769px) {
+
+            /* Laptop/Desktop */
+            .schedule-log-row {
+                grid-template-columns: 1fr 1fr;
+                /* Side by Side */
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /* Mobile */
+            .overview-stats {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .schedule-log-row {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                            <path d="M2 17l10 5 10-5" />
+                            <path d="M2 12l10 5 10-5" />
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>ESE Study Tracker</h1>
+                        <span class="batch-name">Parakram 2027 • Electronics</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="date-display" id="currentDate"></div>
+                    <button class="settings-btn" onclick="toggleSettings()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="main-content">
+            <!-- Today's Overview Card -->
+            <section class="overview-section">
+                <div class="overview-card glass-card">
+                    <div class="overview-header">
+                        <h2>📚 আজকের পড়াশোনা</h2>
+                        <div class="header-badges">
+                            <span class="day-badge" id="dayNumber">Day 1</span>
+                            <span class="date-badge" id="daysLeftBadge">0 দিন বাকি</span>
+                        </div>
+                    </div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="activeSubjectsCount">0</span>
+                            <span class="stat-label">Active</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="todayLectures">0</span>
+                            <span class="stat-label">Target</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="completedLectures">0</span>
+                            <span class="stat-label">Done</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="remainingLectures">0</span>
+                            <span class="stat-label">Remaining</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Ring -->
+                <div class="progress-ring-card glass-card">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" viewBox="0 0 120 120">
+                            <circle class="progress-ring-bg" cx="60" cy="60" r="52" />
+                            <circle class="progress-ring-fill" id="progressRing" cx="60" cy="60" r="52" />
+                        </svg>
+                        <div class="progress-text">
+                            <span class="progress-percent" id="overallProgress">0%</span>
+                            <span class="progress-label">সম্পূর্ণ</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Schedule and Log - Side by Side -->
+            <section class="schedule-log-row">
+                <!-- Today's Schedule -->
+                <div class="schedule-column glass-card">
+                    <div class="section-header compact">
+                        <h2>🎯 Schedule</h2>
+                    </div>
+                    <div class="schedule-container compact" id="todaySchedule">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Log Today's Progress -->
+                <div class="log-column glass-card">
+                    <div class="section-header compact">
+                        <h2>📝 Log Progress</h2>
+                    </div>
+                    <!-- Subject Preview Panel -->
+                    <div class="subject-preview-panel" id="subjectPreview">
+                        <div class="preview-placeholder">
+                            <span class="preview-icon">👆</span>
+                            <span class="preview-text">Select subject to view details</span>
+                        </div>
+                    </div>
+                    <!-- Horizontal Subject Chips -->
+                    <div class="subject-chips-wrapper">
+                        <label class="chips-label">Quick Select</label>
+                        <div class="subject-chips-container" id="subjectChips">
+                            <!-- Subject chips will be inserted dynamically -->
+                        </div>
+                    </div>
+                    <div class="log-inputs-row">
+                        <div class="subject-selector">
+                            <label for="subjectSelect">বা List থেকে:</label>
+                            <div class="select-wrapper">
+                                <button class="scroll-btn left" onclick="scrollSelectLeft()" title="Previous">‹</button>
+                                <select id="subjectSelect" class="select-input">
+                                    <option value="">-- Select --</option>
+                                </select>
+                                <button class="scroll-btn right" onclick="scrollSelectRight()" title="Next">›</button>
+                            </div>
+                        </div>
+                        <div class="lecture-input">
+                            <label for="lectureCount">Lectures:</label>
+                            <div class="input-group">
+                                <button class="input-btn minus" onclick="decrementLecture()" title="Decrease">−</button>
+                                <input type="number" id="lectureCount" value="1" min="1" class="number-input"
+                                    title="Lecture count">
+                                <button class="input-btn plus" onclick="incrementLecture()" title="Increase">+</button>
+                            </div>
+                        </div>
+                        <button class="log-btn" onclick="logProgress()" title="Log progress">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12l5 5L20 7" />
+                            </svg>
+                            Log
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Subjects Overview -->
+            <section class="subjects-section">
+                <div class="section-header">
+                    <h2>📖 সব Subjects</h2>
+                    <div class="header-controls">
+                        <div class="search-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="M21 21l-4.35-4.35" />
+                            </svg>
+                            <input type="text" id="subjectSearch" placeholder="Search subjects..."
+                                oninput="searchSubjects()">
+                        </div>
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" onclick="filterSubjects('all')">সব</button>
+                            <button class="filter-tab" onclick="filterSubjects('active')">চলছে</button>
+                            <button class="filter-tab" onclick="filterSubjects('upcoming')">আসছে</button>
+                            <button class="filter-tab" onclick="filterSubjects('completed')">শেষ</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="subjects-grid" id="subjectsGrid">
+                    <!-- Subject cards will be inserted here -->
+                </div>
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <button class="page-btn prev" onclick="prevPage()" id="prevBtn" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                        আগে
+                    </button>
+                    <div class="page-numbers" id="pageNumbers">
+                        <!-- Page numbers will be inserted here -->
+                    </div>
+                    <button class="page-btn next" onclick="nextPage()" id="nextBtn">
+                        পরে
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Settings Panel (Hidden by default) -->
+        <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings(event)">
+            <div class="settings-panel glass-card">
+                <div class="settings-header">
+                    <h2>⚙️ Settings</h2>
+                    <button class="close-btn" onclick="toggleSettings()">×</button>
+                </div>
+                <div class="settings-content">
+                    <div class="setting-group">
+                        <h3>Subject Configuration</h3>
+                        <p class="setting-description">প্রতিটি Subject এ কতগুলো Lecture আছে সেট করুন</p>
+                        <div class="settings-search-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="M21 21l-4.35-4.35" />
+                            </svg>
+                            <input type="text" id="settingsSubjectSearch" placeholder="Search subject..."
+                                oninput="searchSettingsSubjects()">
+                        </div>
+                        <div class="subject-config-list" id="subjectConfigList">
+                            <!-- Dynamic configuration inputs -->
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <h3>Course Timeline</h3>
+                        <div class="timeline-settings">
+                            <div class="setting-item">
+                                <label>Start Date:</label>
+                                <input type="date" id="startDate" class="date-input">
+                            </div>
+                            <div class="setting-item">
+                                <label>End Date:</label>
+                                <input type="date" id="endDate" class="date-input">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="save-settings-btn" onclick="saveSettings()">
+                        💾 Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <span class="toast-message" id="toastMessage"></span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,270 @@
+{
+    "subjects": [
+        {
+            "id": "signals",
+            "name": "Signal and System",
+            "startDate": "2025-11-17",
+            "endDate": "2025-12-30",
+            "totalLectures": 45,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "digital",
+            "name": "Digital Electronics",
+            "startDate": "2026-01-05",
+            "endDate": "2026-04-02",
+            "totalLectures": 60,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "network",
+            "name": "Network Theory",
+            "startDate": "2026-01-07",
+            "endDate": "2026-03-31",
+            "totalLectures": 55,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "engg_math",
+            "name": "Engineering Mathematics",
+            "startDate": "2026-03-26",
+            "endDate": "2026-05-31",
+            "totalLectures": 70,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "emft",
+            "name": "EMFT - Electronics",
+            "startDate": "2026-04-13",
+            "endDate": "2026-08-08",
+            "totalLectures": 65,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "general_aptitude",
+            "name": "General Aptitude",
+            "startDate": "2026-06-03",
+            "endDate": "2026-06-28",
+            "totalLectures": 25,
+            "mode": "LIVE",
+            "category": "aptitude"
+        },
+        {
+            "id": "mech_material",
+            "name": "Mechanical - Material Science",
+            "startDate": "2026-06-20",
+            "endDate": "2026-06-26",
+            "totalLectures": 10,
+            "mode": "Recorded",
+            "category": "gs"
+        },
+        {
+            "id": "standards_quality",
+            "name": "Standards and Quality Practices",
+            "startDate": "2026-06-27",
+            "endDate": "2026-07-03",
+            "totalLectures": 8,
+            "mode": "Recorded",
+            "category": "gs"
+        },
+        {
+            "id": "verbal_aptitude",
+            "name": "Verbal Aptitude",
+            "startDate": "2026-07-01",
+            "endDate": "2026-07-05",
+            "totalLectures": 6,
+            "mode": "LIVE",
+            "category": "aptitude"
+        },
+        {
+            "id": "project_mgmt",
+            "name": "Project Management",
+            "startDate": "2026-07-04",
+            "endDate": "2026-07-11",
+            "totalLectures": 10,
+            "mode": "Recorded",
+            "category": "gs"
+        },
+        {
+            "id": "ethics",
+            "name": "Engineering Ethics",
+            "startDate": "2026-07-12",
+            "endDate": "2026-07-18",
+            "totalLectures": 8,
+            "mode": "Recorded",
+            "category": "gs"
+        },
+        {
+            "id": "microprocessor",
+            "name": "Microprocessors - ESE",
+            "startDate": "2026-07-13",
+            "endDate": "2026-08-08",
+            "totalLectures": 30,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "design_safety",
+            "name": "Design, Drawing, and Safety",
+            "startDate": "2026-07-19",
+            "endDate": "2026-07-25",
+            "totalLectures": 8,
+            "mode": "Recorded",
+            "category": "gs"
+        },
+        {
+            "id": "energy_env",
+            "name": "Energy and Environment",
+            "startDate": "2026-07-26",
+            "endDate": "2026-08-01",
+            "totalLectures": 8,
+            "mode": "Recorded",
+            "category": "gs"
+        },
+        {
+            "id": "elec_material",
+            "name": "Electrical - Material Science",
+            "startDate": "2026-08-02",
+            "endDate": "2026-08-08",
+            "totalLectures": 8,
+            "mode": "Recorded",
+            "category": "gs"
+        },
+        {
+            "id": "adv_comm",
+            "name": "Advanced Communication - ESE",
+            "startDate": "2026-08-03",
+            "endDate": "2026-08-22",
+            "totalLectures": 25,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "ict",
+            "name": "ICT (Info & Comm Tech)",
+            "startDate": "2026-08-09",
+            "endDate": "2026-08-16",
+            "totalLectures": 10,
+            "mode": "Recorded",
+            "category": "gs"
+        },
+        {
+            "id": "edc",
+            "name": "EDC",
+            "startDate": "2026-08-10",
+            "endDate": "2026-10-30",
+            "totalLectures": 55,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "comm_system",
+            "name": "Communication System",
+            "startDate": "2026-08-25",
+            "endDate": "2026-10-30",
+            "totalLectures": 50,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "coa",
+            "name": "COA",
+            "startDate": "2026-09-11",
+            "endDate": "2026-09-30",
+            "totalLectures": 25,
+            "mode": "Recorded",
+            "category": "core"
+        },
+        {
+            "id": "analog",
+            "name": "Analog Electronics",
+            "startDate": "2026-11-02",
+            "endDate": "2026-12-30",
+            "totalLectures": 50,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "control",
+            "name": "Control System",
+            "startDate": "2026-11-16",
+            "endDate": "2026-12-24",
+            "totalLectures": 40,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "adv_electronics",
+            "name": "Advanced Electronics - ESE",
+            "startDate": "2026-11-17",
+            "endDate": "2026-12-17",
+            "totalLectures": 30,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "current_affairs",
+            "name": "Current Affairs",
+            "startDate": "2026-12-02",
+            "endDate": "2026-12-20",
+            "totalLectures": 20,
+            "mode": "LIVE",
+            "category": "gs"
+        },
+        {
+            "id": "basic_elec",
+            "name": "Basic Electrical - ESE",
+            "startDate": "2026-12-01",
+            "endDate": "2026-12-24",
+            "totalLectures": 25,
+            "mode": "LIVE",
+            "category": "core"
+        },
+        {
+            "id": "foundation_math",
+            "name": "Foundation of Engg Math",
+            "startDate": "2025-11-17",
+            "endDate": "2025-12-30",
+            "totalLectures": 30,
+            "mode": "Recorded",
+            "category": "foundation"
+        },
+        {
+            "id": "physics",
+            "name": "Physics",
+            "startDate": "2025-11-17",
+            "endDate": "2025-12-30",
+            "totalLectures": 25,
+            "mode": "Recorded",
+            "category": "foundation"
+        }
+    ],
+    "courseConfig": {
+        "startDate": "2025-11-17",
+        "endDate": "2026-12-30",
+        "totalDays": 410
+    },
+    "categoryColors": {
+        "core": {
+            "bg": "rgba(99, 102, 241, 0.2)",
+            "text": "#a5b4fc"
+        },
+        "aptitude": {
+            "bg": "rgba(245, 158, 11, 0.2)",
+            "text": "#fcd34d"
+        },
+        "gs": {
+            "bg": "rgba(16, 185, 129, 0.2)",
+            "text": "#6ee7b7"
+        },
+        "foundation": {
+            "bg": "rgba(168, 85, 247, 0.2)",
+            "text": "#d8b4fe"
+        }
+    }
+}
