@@ -524,6 +524,10 @@ function renderSubjectsGrid() {
                     <span class="meta-value">${lecturesPerDay}</span>
                 </div>
                 <div class="meta-item">
+                    <span class="meta-label">Duration</span>
+                    <span class="meta-value">${totalDays} দিন</span>
+                </div>
+                <div class="meta-item">
                     <span class="meta-label">End</span>
                     <span class="meta-value">${formatDate(subject.endDate)}</span>
                 </div>
